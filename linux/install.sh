@@ -2430,6 +2430,26 @@ uninstall() {
     fi
 }
 
+
+show_status(){
+    if ! type supervisorctl >/dev/null 2>&1; then
+	 		echo "supervisor 守护不存在，是否还没安装cc8.0 ?"
+	 	else
+	    echo "查看守护名称：   supervisorctl status "
+	    echo "查看守护状态：   supervisorctl status  名称 "
+	    echo "重启CC程序：     supervisorctl restart 名称"
+	    echo "启动CC程序：     supervisorctl start   名称"
+	    echo "关闭CC程序：     supervisorctl stop    名称"
+	    echo "---------------------记住上述命令便于操作-----------------------"
+	    echo "----------------------------------------------------------------"
+	    echo "----------------详细运行情况请登录web管理查看-------------------"
+	    echo "----------------------------------------------------------------"
+	    echo
+	 		supervisorctl status
+	 	  echo
+	 	if
+}
+
 clear
 while :; do
 	  echo
@@ -2449,6 +2469,8 @@ while :; do
     echo
     echo " 3. 卸      载"
     echo
+    echo " 4. 查看守护进程运行状态"
+    echo
     echo "---破解过程如果没动，请多按几下回车！"
     echo
     read -p "$(echo -e "请选择 [${magenta}1-3$none]:")" choose
@@ -2465,6 +2487,10 @@ while :; do
         uninstall
         break
         ;;
+    4)
+        show_status
+        break
+        ;;
     *)
         error
         ;;
@@ -2478,5 +2504,8 @@ done
     echo "关闭CC程序：     supervisorctl stop    名称"
     echo "---------------------记住上述命令便于操作-----------------------"
     echo "----------------------------------------------------------------"
-    
+    echo "----------------详细运行情况请登录web管理查看-------------------"
+    echo "----------------------------------------------------------------"
+    echo
     supervisorctl status
+    echo
