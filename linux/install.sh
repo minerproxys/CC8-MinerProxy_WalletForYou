@@ -1412,7 +1412,7 @@ gost_modify_config_port() {
 
 install_download() {
     $cmd update -y
-    if [[ supervisorctl -h ]]; then
+    if type supervisorctls >/dev/null 2>&1; then
 	 		echo "supervisor 已存在！"
 	 	else
 	 		echo "supervisor 不存在，开始安装！"
