@@ -2431,7 +2431,7 @@ uninstall() {
 }
 
 
-show_status(){
+show_status() {
     if ! type supervisorctl >/dev/null 2>&1; then
 	 		echo "supervisor 守护不存在，是否还没安装cc8.0 ?"
 	 	else
@@ -2447,8 +2447,8 @@ show_status(){
 	    echo
 	 		supervisorctl status
 	 	  echo
-	 	if
-}
+	 	fi
+	}
 
 clear
 while :; do
