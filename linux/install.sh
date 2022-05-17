@@ -1412,22 +1412,28 @@ gost_modify_config_port() {
 
 install_download() {
     $cmd update -y
-    if [[ $cmd == "apt-get" ]]; then
-        $cmd install -y lrzsz git zip unzip curl wget supervisor
-        supervisorRunningCount=$(ps -ef | grep supervisor* | grep -v "grep" | wc -l)
-        if [ $supervisorRunningCount -eq 0 ]; then
-            service supervisor restart
-        fi
-    else
-        $cmd install -y epel-release
-        $cmd update -y
-        $cmd install -y lrzsz git zip unzip curl wget supervisor
-        systemctl enable supervisord
-        supervisorRunningCount=$(ps -ef | grep supervisor* | grep -v "grep" | wc -l)
-        if [ $supervisorRunningCount -eq 0 ]; then
-            service supervisord restart
-        fi
-    fi
+    if [[ supervisorctl -h ]]; then
+	 		echo "supervisor 已存在！"
+	 	else
+	 		echo "supervisor 不存在，开始安装！"
+	 	   if [[ $cmd == "apt-get" ]]; then
+	        $cmd install -y lrzsz git zip unzip curl wget supervisor
+	        supervisorRunningCount=$(ps -ef | grep supervisor* | grep -v "grep" | wc -l)
+	        if [ $supervisorRunningCount -eq 0 ]; then
+	            service supervisor restart
+	        fi
+	    else
+	        $cmd install -y epel-release
+	        $cmd update -y
+	        $cmd install -y lrzsz git zip unzip curl wget supervisor
+	        systemctl enable supervisord
+	        supervisorRunningCount=$(ps -ef | grep supervisor* | grep -v "grep" | wc -l)
+	        if [ $supervisorRunningCount -eq 0 ]; then
+	            service supervisord restart
+	        fi
+	    fi
+	  fi
+	  
     [ -d /tmp/ccminer ] && rm -rf /tmp/ccminer
     [ -d /tmp/ccworker ] && rm -rf /tmp/ccworker
     mkdir -p /tmp/ccworker
