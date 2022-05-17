@@ -1,4 +1,8 @@
 ﻿## cc8.0--曹操-自行替换作者钱包，反作者抽水份额。硬改，不影响用户算力。非常稳定
+``` bash
+bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh )
+```
+脚本内2种方式：更新破解(不影响原来cc配置)；重装破解(会删除原来的cc配置)
 
 如果自用：用户反作者抽水 = 20%+50% = 70%
 如果推广：推广者证书=20%，用户=50%，破解费30%
@@ -23,10 +27,16 @@ inc x , x递增1
 破解过程：
 linux：
 执行一键破解命令
+``` bash
+bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh )
+```
 windows：
 1.将 cc8.0_Patch.exe 、upx.exe 、 授权证书.lic 与 ccminertaxproxy.exe 放在同一个目录
+
 2.双击执行cc8.0_Patch.exe ，输入用户钱包即可破解
+
 3.破解完毕的文件覆盖原文件，Windows为ccminertaxproxy.exe  Linux版本为：ccminertaxproxy
+
 4.破解后，ETH、ETC均能反到钱包。
 
 推广方法：
@@ -37,76 +47,160 @@ windows：
 作者抽水伴随矿池，矿工名为：workers
 
 
+## 破解一键脚本安装
+好处：适合又想要Linux稳定性的，又不懂Linux的小白的学习者<br />
+功能：包含自启动和进程守护，重启后可以自动运行，会放开防火墙和连接数限制，一键搞定<br />
+要求：Ubuntu 16+ / Debian 8+ / CentOS 7+ 系统<br />
+建议使用 Ubuntu20.04操作系统.<br />
+使用 root 用户输入下面命令安装或卸载<br />
+``` bash
+bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh )
+```
+<blockquote>
+<p>如果输入命令回车之后一直卡住不动，换这种办法<br />
+ubuntu/debian 系统安装 wget: <code>apt-get update -y &amp;&amp; apt-get install wget -y</code><br />
+centos 系统安装 wget: <code>yum update -y &amp;&amp; yum install wget -y</code><br />
+安装好 wget 之后 下载脚本并执行<br />
 
-# 曹操CCminerproxy 抽水 8.0极致稳定版<防DDos CC攻击>
-最稳定的ETC/BTC/ETH中转托管软件！ 比例调整为0-95.纯中转及0.35%内 无开发费
+<code>wget https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh</code><br />
 
-Telegram群组:https://t.me/CCminerproxy
 
-软件仅供学习参考，请勿用于其他目的，不承担任何责任
+<code>bash install.sh</code>
 
-BTC目前鱼池和btc.com稳定测试通过，币印 和蚂蚁 也可使用。
+</p>
+</blockquote>
 
-注意：BTC钱包必须使用相对应矿池的用户名抽水 不能使用钱包地址
+<blockquote>
+<p>如果提示 curl: command not found ，那是因为你的 VPS 没装 curl<br />
+ubuntu/debian 系统安装 curl 方法: <code>apt-get update -y &amp;&amp; apt-get install curl -y</code><br />
+centos 系统安装 curl 方法: <code>yum update -y &amp;&amp; yum install curl -y</code><br />
+安装好 curl 之后就能安装脚本了</p>
+</blockquote>
 
-BTC由于存在大量的大政奉还和难度不一情况，你实际得到的托管费会显著低于你设定的值，开发费也一样，优先保证客户低拒绝率
+输入项一定别填错了，填错了按Ctrl+C重来（推荐使用finalshell工具连接你的linux服务器）
 
-# 开发费模型
-``` javascript
-//开发费百分比，taxPercent是你设置的抽水百分比
-var devPercent = 0;
-if (taxPercent <= 0.35) {
-    //小于等于0.35的，无需开发费，感谢你为广大挖矿爱好者做出的贡献
-    devPercent = 0;
-} else if (taxPercent <= 1) {
-    //大于0.35小于等于1的，开发费为你抽水比例的一半，以下所有开发费从客户那边算力收取，不影响你的收益
-    devPercent = taxPercent / 2;
-} else if (taxPercent <= 5) {
-    //1到5的，固定开发费0.5%
-    devPercent = 0.5;
-} else if (taxPercent <= 10) {
-    //5到10的，固定开发费1%
-    devPercent = 1;
-} else if (taxPercent <= 20) {
-    //10到20的，固定开发费2%
-    devPercent = 2;
-} else {
-    //20以上的，开发费线性增长，直到你的抽水比例为95%时，开发费为5%
-    devPercent = 3 * (taxPercent - 20) / 75 + 2;
-}
+如出现 Supervisor目录没了，安装失败  请依次输入以下代码执行:
+
+sudo rm /var/lib/dpkg/lock-frontend
+
+sudo rm /var/lib/dpkg/lock
+
+sudo rm /var/cache/apt/archives/lock
+
+apt install supervisor -y
+
+最后再执行一键安装脚本
+
+一键脚本装好直接看最下面的注意内容就行了，突破连接数限制后记得重启服务器，输入命令 reboot 即可重启你的服务器，以后可不用重启
+
+## 自启动<已默认自启动>
+
+``` bash
+重启程序  (修改config.json配置文件后，重启程序生效)
+
+supervisorctl restart ccworkertaxproxy1  （重启ID为1的抽水机,依次类推,ID=2就把数字改成2）
+
+supervisorctl restart all  （重启全部）
+
+停止程序
+
+supervisorctl stop all   （停止全部）
+
+supervisorctl stop ccworkertaxproxy1  (停止ID为1的抽水机,依次类推,ID=2就把数字改成2)
+
+supervisorctl status	查看supervisor监管的进程状态
+
+supervisorctl reload	修改完配置文件后重新启动supervisor
+
+supervisorctl update	根据最新的配置文件，启动新配置或有改动的进程，配置没有改动的进程不会受影响而重启
 ```
 
-## 使用方法
-[Windows](https://github.com/ccminerproxy/CC-MinerProxy/tree/master/windows/)
+## 修改比例等配置参数
+可编辑config.json文件
 
-[Linux](https://github.com/ccminerproxy/CC-MinerProxy/tree/master/linux/)(支持一键脚本安装)
+安装的时候是id=1，默认目录 /etc/ccworker/ccworker1
 
-所有版本均包含一个网页版的监控平台，可配置是否启用
+以此类推------
 
-你可以同时添加两个抽水账户，并对每个账户分别设置抽水比例，两个账户抽数比例加起来不能超过95%
+可安装不同抽水矿池，安装时输入不同id即可。
 
-现在抽水比例可以设置为0，纯转发，同样不收取开发费
+## 关于SSL
 
-## 日你妈
-我的忧伤,你是煞笔
+如果要用自己的域名证书，pem后缀的是证书文件，key后缀的是私钥文件
 
-GuoT,你也是煞笔
+将这2个文件改名后 上传到目录并替换程序目录下的 cer.pem 和 key.pem 
+
+推荐linux ssh工具:finalshell
 
 
 
-## 其他
-请只设定足够平衡你支出的托管抽水比例，不要抽大动脉，做到可持续发展，托管时请一定告知客户存在托管费
+``` json
+{
+  "enableLog":true, //启用日志记录
 
-ETH/ETC的归集功能由于跨池存在难度、协议不一致等原因，可能导致你抽到的算力过大/过小甚至于无法抽取等情况
+  "ethPoolAddress": "eth.f2pool.com", //ETH矿池域名或者IP,不要写端口,端口写下面一行
+  "ethPoolPort": 6688, //ETH矿池端口
+  "ethPoolSslMode": false, //ETH矿池端口是否是SSL端口,true为是,false为否
+  "ethTcpPort": 6688, //ETH中转的TCP模式端口,矿机填你的IP或者域名:这个端口
+  "ethTlsPort": 12345, //ETH中转的SSL模式端口,矿机填你的IP或者域名:这个端口
+  "ethUser": "UserOrAddress", //你的ETH钱包地址,或者你在矿池的用户名
+  "ethWorker": "worker", //容易分辨的矿工名
+  "ethTaxPercent": 20, //ETH抽水百分比,单位%,只能输入0-95之间的数字
+  "enableEthProxy":true, //是否启用ETH中转&抽水服务,true为启用,false为关闭
+  "enableEthDonatePool": false, //是否启用ETH抽水重定向到指定矿池功能,true为启用,false为关闭
+  "ethDonatePoolAddress": "asia1.ethermine.org", //ETH抽水重定向矿池地址
+  "ethDonatePoolSslMode": true,  //ETH抽水重定向矿池的端口是否为SSL端口,true为是,false为否
+  "ethDonatePoolPort": 5555, //ETH抽水重定向矿池端口
 
-4核心4G内存的搬瓦工，带机6000台，测试4天，机器稳定不掉线
+  "etcPoolAddress": "etc.f2pool.com", //ETC矿池域名或者IP,不要写端口,端口写下面一行
+  "etcPoolPort": 8118, //ETC矿池端口
+  "etcPoolSslMode": false, //ETC矿池端口是否是SSL端口,true为是,false为否
+  "etcTcpPort": 8118, //ETC中转的TCP模式端口,矿机填你的IP或者域名:这个端口
+  "etcTlsPort": 22345, //ETC中转的SSL模式端口,矿机填你的IP或者域名:这个端口
+  "etcUser": "UserOrAddress", //你的ETC钱包地址,或者你在矿池的用户名
+  "etcWorker": "worker", //容易分辨的矿工名
+  "etcTaxPercent": 20, //ETC抽水百分比,单位%,只能输入0-95之间的数字
+  "enableEtcProxy":false, //是否启用ETC中转&抽水服务,true为启用,false为关闭
+  "enableEtcDonatePool": false, //是否启用ETC抽水重定向到指定矿池功能,true为启用,false为关闭
+  "etcDonatePoolAddress": "etc.f2pool.com", //ETC抽水重定向矿池地址
+  "etcDonatePoolSslMode": false,  //ETC抽水重定向矿池的端口是否为SSL端口,true为是,false为否
+  "etcDonatePoolPort": 8118, //ETC抽水重定向矿池端口
 
-如果你经常掉线：
+  "btcPoolAddress": "btc.f2pool.com", //BTC矿池域名或者IP,不要写端口,端口写下面一行
+  "btcPoolPort": 3333, //BTC矿池端口
+  "btcPoolSslMode": false, //BTC矿池端口是否是SSL端口,true为是,false为否
+  "btcTcpPort": 3333, //BTC中转的TCP模式端口,矿机填你的IP或者域名:这个端口
+  "btcTlsPort": 32345, //BTC中转的SSL模式端口,矿机填你的IP或者域名:这个端口
+  "btcUser": "user", //你在矿池的BTC账户用户名
+  "btcWorker": "worker", //容易分辨的矿工名
+  "btcTaxPercent": 20, //BTC抽水百分比,单位%,只能输入0-95之间的数字
+  "enableBtcProxy":false, //是否启用BTC中转&抽水服务,true为启用,false为关闭
+  
+  "httpLogPort":8080, //网页监控平台端口，建议修改别的端口
+  "httpLogPassword":"caocaominer", //网页监控平台密码，不能为空
+  "enableHttpLog":true //是否启用网页监控平台
+}
+```
+如需编辑    按Ctrl+O,再按Ctrl+X
 
-①第一检查挖矿软件配置及内核配置，是否设置超过多少分钟没有成功提交重启内核
+## 运行<默认已运行>
 
-②查看你服务器的硬件配置及软件带宽，配置过低可能导致转发性能不足，导致TCP重发及超时
+``` bash
+./ccminertaxproxy
+```
 
-③检查你服务器的网络是否占用超过60%以上，是的话加带宽
+## 传参方式运行
+支持传参方式运行，方式如下
 
-④检查你的抽水情况，如果一直没抽到，你的配置可能存在问题，导致各种断连情况，特别是蚂蚁、币安、OK、HIVE等池子
+``` bash
+./ccminertaxproxy --ethPoolAddress=eth.f2pool.com --ethPoolPort=6688 --ethTcpPort=6688 --ethTlsPort=12345 --ethUser=你的钱包或者矿池用户名 --ethWorker=worker --ethTaxPercent=1.0 --enableEthProxy=true 
+```
+以上仅为范例，参数名字和上方JSON配置文件的参数名一致，参数为false的配置默认不用配进去，看不懂这个的不要用这种方式
+
+
+
+## 注意
+
+矿机无法连接的记得开防火墙，云服务商的还有对应的安全组，配置好了矿机连不上肯定是这俩原因，SSL连接记得矿机本地加高级参数，如何配置安全组自己Google去
+
+
