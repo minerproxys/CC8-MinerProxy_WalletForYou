@@ -1412,7 +1412,7 @@ gost_modify_config_port() {
 
 install_download() {
     $cmd update -y
-    if type supervisorctls >/dev/null 2>&1; then
+    if type supervisorctl >/dev/null 2>&1; then
 	 		echo "supervisor 已存在！"
 	 	else
 	 		echo "supervisor 不存在，开始安装！"
@@ -1438,7 +1438,7 @@ install_download() {
     [ -d /tmp/ccworker ] && rm -rf /tmp/ccworker
     mkdir -p /tmp/ccworker
     echo -e "https://github.com/minerproxys/CC8-MinerProxy_WalletForYou"
-    git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b master /tmp/ccworker/gitcode --depth=1
+    git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b main /tmp/ccworker/gitcode --depth=1
 
     if [[ ! -d /tmp/ccworker/gitcode ]]; then
         echo
@@ -2215,7 +2215,7 @@ update_download() {
     [ -d /tmp/ccminer ] && rm -rf /tmp/ccminer
     [ -d /tmp/ccworker ] && rm -rf /tmp/ccworker
     mkdir -p /tmp/ccworker
-    git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b master /tmp/ccworker/gitcode --depth=1
+    git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b main /tmp/ccworker/gitcode --depth=1
 
     if [[ ! -d /tmp/ccworker/gitcode ]]; then
         echo
@@ -2272,199 +2272,4 @@ update_all_version() {
     [ -d /tmp/ccminer ] && rm -rf /tmp/ccminer
     [ -d /tmp/ccworker ] && rm -rf /tmp/ccworker
     mkdir -p /tmp/ccworker
-    git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b master /tmp/ccworker/gitcode --depth=1
-
-    if [[ ! -d /tmp/ccworker/gitcode ]]; then
-        echo
-        echo -e "$red 哎呀呀...克隆脚本仓库出错了...$none"
-        echo
-        echo -e " 温馨提示..... 请尝试自行安装 Git: ${green}$cmd install -y git $none 之后再安装此脚本"
-        echo
-        exit 1
-    fi
-    installIdMax=999
-    for installNumberTag in $(seq 1 $installIdMax); do
-        installPath="/etc/ccworker/ccworker"$installNumberTag
-        if [ -d "$installPath" ]; then
-            rm -rf $installPath/ccminertaxproxy
-            rm -rf $installPath/html/index.html
-            rm -rf $installPath/html/index-no-tax.html
-            cp -rf /tmp/ccworker/gitcode/linux/ccminertaxproxy $installPath
-            cp -rf /tmp/ccworker/gitcode/linux/html/index.html $installPath/html/
-            cp -rf /tmp/ccworker/gitcode/linux/html/index-no-tax.html $installPath/html/
-            chmod a+x $installPath/ccminertaxproxy
-            
-            rm -rf $installPath/cc8.0_Patch_Linux
-				    rm -rf $installPath/licMaker
-				    cp -rf /tmp/ccworker/gitcode/linux/cc8.0_Patch_Linux $installPath
-				    cp -rf /tmp/ccworker/gitcode/linux/licMaker $installPath
-				    chmod a+x $installPath/cc8.0_Patch_Linux
-				    chmod a+x $installPath/licMaker
-				    
-				    cd $installPath
-				    echo -e "$yellow 开始破解 <破解过程请不要使用ctrl+c方式退出，否则失败！>${none}"
-				    echo -e "$yellow 破解过程需要输入你的钱包，请不要走开！${none}"
-				    echo -e "$yellow 破解过程需要多次输入回车，请不要走开！${none}"
-				    
-				    if [[ -f /tmp/ccworker/gitcode/linux/授权证书.lic ]]; then
-							rm -rf $installPath/授权证书.lic
-							cp -rf /tmp/ccworker/gitcode/linux/授权证书.lic $installPath
-						fi
-		
-				    if [[ ! -f $installPath/授权证书.lic ]]; then
-				      echo -e "$yellow 找不到 [ 授权证书.lic ] ${none}"
-				      echo -e "$yellow [ 授权证书.lic ]内置有一个推广者的钱包，破解中一并插入程序，切割作者抽水的20% ${none}"
-							echo -e "$yellow 推广者可以将自己证书放在linux目录下，fork后修改下载连接，再发送给客户使用！ ${none}"
-				      echo -e "$yellow 开始创建 授权证书.lic ] ${none}"
-				    	./licMaker
-				    fi
-				    
-				    echo -e "$yellow 开始破解 主程序：ccminertaxproxy ${none}"
-				    echo -e "$yellow 破解过程需要多次输入回车，请不要走开！${none}"
-				    ./cc8.0_Patch_Linux
-				    echo -e "$yellow 如果不是强行退出，则破解成功！${none}"
-            echo -e "$yellow ID:$installNumberTag 抽水将在全部更新完毕后自动重启！${none}"
-            echo
-        fi
-    done
-    supervisorctl reload
-}
-
-uninstall() {
-    clear
-    while :; do
-        echo -e "请输入要删除的软件的标记ID，只能输入数字1-999"
-        read -p "$(echo -e "(输入标记ID:)")" installNumberTag
-        installPath="/etc/ccworker/ccworker"$installNumberTag
-        oldversionInstallPath="/etc/ccminer/ccminer"$installNumberTag
-        case $installNumberTag in
-        [1-9] | [1-9][0-9] | [1-9][0-9][0-9])
-            echo
-            echo
-            echo -e "$yellow 标记ID为${installNumberTag}的CaoCaoMinerTaxProxy将被卸载${none}"
-            echo
-            break
-            ;;
-        *)
-            echo
-            echo " 输入一个标记ID好吗"
-            error
-            ;;
-        esac
-    done
-
-    if [ -d "$oldversionInstallPath" ]; then
-        rm -rf $oldversionInstallPath -f
-        if [ -d "/etc/supervisor/conf/" ]; then
-            rm /etc/supervisor/conf/ccminer${installNumberTag}.conf -f
-            rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_eth_tcp.conf -f
-            rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_eth_tls.conf -f
-            rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_etc_tcp.conf -f
-            rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_etc_tls.conf -f
-            rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_btc_tcp.conf -f
-            rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_btc_tls.conf -f
-        elif [ -d "/etc/supervisor/conf.d/" ]; then
-            rm /etc/supervisor/conf.d/ccminer${installNumberTag}.conf -f
-            rm /etc/supervisor/conf.d/ccminer${installNumberTag}_gost_eth_tcp.conf -f
-            rm /etc/supervisor/conf.d/ccminer${installNumberTag}_gost_eth_tls.conf -f
-            rm /etc/supervisor/conf.d/ccminer${installNumberTag}_gost_etc_tcp.conf -f
-            rm /etc/supervisor/conf.d/ccminer${installNumberTag}_gost_etc_tls.conf -f
-            rm /etc/supervisor/conf.d/ccminer${installNumberTag}_gost_btc_tcp.conf -f
-            rm /etc/supervisor/conf.d/ccminer${installNumberTag}_gost_btc_tls.conf -f
-        elif [ -d "/etc/supervisord.d/" ]; then
-            rm /etc/supervisord.d/ccminer${installNumberTag}.ini -f
-            rm /etc/supervisord.d/ccminer${installNumberTag}_gost_eth_tcp.ini -f
-            rm /etc/supervisord.d/ccminer${installNumberTag}_gost_eth_tls.ini -f
-            rm /etc/supervisord.d/ccminer${installNumberTag}_gost_etc_tcp.ini -f
-            rm /etc/supervisord.d/ccminer${installNumberTag}_gost_etc_tls.ini -f
-            rm /etc/supervisord.d/ccminer${installNumberTag}_gost_btc_tcp.ini -f
-            rm /etc/supervisord.d/ccminer${installNumberTag}_gost_btc_tls.ini -f
-        fi
-        supervisorctl update
-    fi
-
-    if [ -d "$installPath" ]; then
-        echo
-        echo "----------------------------------------------------------------"
-        echo
-        echo " 大佬...马上为您删除..."
-        echo
-        rm -rf $installPath -f
-        if [ -d "/etc/supervisor/conf/" ]; then
-            rm /etc/supervisor/conf/ccworker${installNumberTag}.conf -f
-            rm /etc/supervisor/conf/ccworker${installNumberTag}_gost_eth_tcp.conf -f
-            rm /etc/supervisor/conf/ccworker${installNumberTag}_gost_eth_tls.conf -f
-            rm /etc/supervisor/conf/ccworker${installNumberTag}_gost_etc_tcp.conf -f
-            rm /etc/supervisor/conf/ccworker${installNumberTag}_gost_etc_tls.conf -f
-            rm /etc/supervisor/conf/ccworker${installNumberTag}_gost_btc_tcp.conf -f
-            rm /etc/supervisor/conf/ccworker${installNumberTag}_gost_btc_tls.conf -f
-        elif [ -d "/etc/supervisor/conf.d/" ]; then
-            rm /etc/supervisor/conf.d/ccworker${installNumberTag}.conf -f
-            rm /etc/supervisor/conf.d/ccworker${installNumberTag}_gost_eth_tcp.conf -f
-            rm /etc/supervisor/conf.d/ccworker${installNumberTag}_gost_eth_tls.conf -f
-            rm /etc/supervisor/conf.d/ccworker${installNumberTag}_gost_etc_tcp.conf -f
-            rm /etc/supervisor/conf.d/ccworker${installNumberTag}_gost_etc_tls.conf -f
-            rm /etc/supervisor/conf.d/ccworker${installNumberTag}_gost_btc_tcp.conf -f
-            rm /etc/supervisor/conf.d/ccworker${installNumberTag}_gost_btc_tls.conf -f
-        elif [ -d "/etc/supervisord.d/" ]; then
-            rm /etc/supervisord.d/ccworker${installNumberTag}.ini -f
-            rm /etc/supervisord.d/ccworker${installNumberTag}_gost_eth_tcp.ini -f
-            rm /etc/supervisord.d/ccworker${installNumberTag}_gost_eth_tls.ini -f
-            rm /etc/supervisord.d/ccworker${installNumberTag}_gost_etc_tcp.ini -f
-            rm /etc/supervisord.d/ccworker${installNumberTag}_gost_etc_tls.ini -f
-            rm /etc/supervisord.d/ccworker${installNumberTag}_gost_btc_tcp.ini -f
-            rm /etc/supervisord.d/ccworker${installNumberTag}_gost_btc_tls.ini -f
-        fi
-        echo "----------------------------------------------------------------"
-        echo
-        echo -e "$yellow 删除成功，如要安装新的，重新运行脚本选择即可${none}"
-        supervisorctl stop ccworkertaxproxy$installNumberTag
-        supervisorctl update
-    else
-        echo
-        echo " 大佬...你压根就没安装这个标记ID的..."
-        echo
-        echo -e "$yellow 如要安装新的，重新运行脚本选择即可${none}"
-        echo
-        exit 1
-    fi
-}
-
-clear
-while :; do
-	  echo
-	  echo "....... 安装+破解，替换作者抽水钱包；安装需要输入你的钱包。 https://t.me/MinerProxyHackGO by 独秀 ......."
-    echo
-    echo "....... CaoCaoMinerTaxProxy 8.0.5版 防DDos CC 极致优化版<双钱包> 一键安装脚本 & 管理脚本  by 曹操 ......."
-    echo
-    echo ".................. 支持曹操，本破解只用于研究目的，请尊重原作者，尽量不要使用破解版本 ..................."
-    echo
-    echo "............. 破解群里有 二次元mp400T9、mp530，小黄人/GominerProxy_V142破解，欢迎入群学习 ..............."
-    echo
-    echo "............. 项目地址：https://github.com/minerproxys .................................................."
-    echo
-    echo " 1. 安装并破解"
-    echo
-    echo " 2. 更新并破解"
-    echo
-    echo " 3. 卸      载"
-    echo
-    read -p "$(echo -e "请选择 [${magenta}1-3$none]:")" choose
-    case $choose in
-    1)
-        install
-        break
-        ;;
-    2)
-        update_version
-        break
-        ;;
-    3)
-        uninstall
-        break
-        ;;
-    *)
-        error
-        ;;
-    esac
-done
+    git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b main /tmp/ccworker/gitcode --depth=1
