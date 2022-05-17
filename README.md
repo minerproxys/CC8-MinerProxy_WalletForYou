@@ -1,4 +1,8 @@
 ﻿## cc8.0--曹操-自行替换作者钱包，反作者抽水份额。硬改，不影响用户算力。非常稳定
+linux破解 执行一键破解命令：
+
+更新破解：不影响原cc配置；安装破解：需要重新配置cc
+
 ``` bash
 bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh )
 ```
