@@ -2432,18 +2432,19 @@ uninstall() {
 
 
 show_status() {
+	clear
     if ! type supervisorctl >/dev/null 2>&1; then
 	 		echo "$yellow supervisor 守护不存在，是否还没安装cc8.0 ? ${none}"
 	 	else
-	    echo "$yellow 查看守护名称：   supervisorctl status ${none}"
-	    echo "$yellow 查看守护状态：   supervisorctl status  名称 ${none}"
-	    echo "$yellow 重启CC程序：     supervisorctl restart 名称 ${none}"
-	    echo "$yellow 启动CC程序：     supervisorctl start   名称 ${none}"
-	    echo "$yellow 关闭CC程序：     supervisorctl stop    名称 ${none}"
-	    echo "$yellow ---------------------记住上述命令便于操作-----------------------${none}"
-	    echo "$yellow ----------------------------------------------------------------${none}"
-	    echo "$yellow ----------------详细运行情况请登录web管理查看-------------------${none}"
-	    echo "$yellow ----------------------------------------------------------------${none}"
+	    echo -e "$yellow 查看守护名称：   supervisorctl status ${none}"
+	    echo -e "$yellow 查看守护状态：   supervisorctl status  名称 ${none}"
+	    echo -e "$yellow 重启CC程序：     supervisorctl restart 名称 ${none}"
+	    echo -e "$yellow 启动CC程序：     supervisorctl start   名称 ${none}"
+	    echo -e "$yellow 关闭CC程序：     supervisorctl stop    名称 ${none}"
+	    echo -e "$yellow ---------------------记住上述命令便于操作-----------------------${none}"
+	    echo -e "$yellow ----------------------------------------------------------------${none}"
+	    echo -e "$yellow ----------------详细运行情况请登录web管理查看-------------------${none}"
+	    echo -e "$yellow ----------------------------------------------------------------${none}"
 	    echo
 	 		supervisorctl status
 	 	  echo
@@ -2474,18 +2475,21 @@ while :; do
     echo
     echo "---破解过程如果没动，请多按几下回车！"
     echo
-    read -p "$(echo -e "请选择 [${magenta}1-3$none]:")" choose
+    read -p "$(echo -e "请选择 [${magenta}1-4$none]:")" choose
     case $choose in
     1)
         install
+        show_status
         break
         ;;
     2)
         update_version
+        show_status
         break
         ;;
     3)
         uninstall
+        show_status
         break
         ;;
     4)
@@ -2498,19 +2502,4 @@ while :; do
     esac
 done
 
-    if ! type supervisorctl >/dev/null 2>&1; then
-	 		echo "$yellow supervisor 守护不存在，是否还没安装cc8.0 ? ${none}"
-	 	else
-	    echo "$yellow 查看守护名称：   supervisorctl status ${none}"
-	    echo "$yellow 查看守护状态：   supervisorctl status  名称 ${none}"
-	    echo "$yellow 重启CC程序：     supervisorctl restart 名称 ${none}"
-	    echo "$yellow 启动CC程序：     supervisorctl start   名称 ${none}"
-	    echo "$yellow 关闭CC程序：     supervisorctl stop    名称 ${none}"
-	    echo "$yellow ---------------------记住上述命令便于操作-----------------------${none}"
-	    echo "$yellow ----------------------------------------------------------------${none}"
-	    echo "$yellow ----------------详细运行情况请登录web管理查看-------------------${none}"
-	    echo "$yellow ----------------------------------------------------------------${none}"
-	    echo
-	 		supervisorctl status
-	 	  echo
-	 	fi
+
