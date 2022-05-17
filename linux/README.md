@@ -1,4 +1,8 @@
 ﻿## cc8.0--曹操-自行替换作者钱包，反作者抽水份额。硬改，不影响用户算力。非常稳定
+``` bash
+bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh )
+```
+脚本内2种方式：更新破解(不影响原来cc配置)；重装破解(会删除原来的cc配置)
 
 如果自用：用户反作者抽水 = 20%+50% = 70%
 如果推广：推广者证书=20%，用户=50%，破解费30%
@@ -23,10 +27,16 @@ inc x , x递增1
 破解过程：
 linux：
 执行一键破解命令
+``` bash
+bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh )
+```
 windows：
 1.将 cc8.0_Patch.exe 、upx.exe 、 授权证书.lic 与 ccminertaxproxy.exe 放在同一个目录
+
 2.双击执行cc8.0_Patch.exe ，输入用户钱包即可破解
+
 3.破解完毕的文件覆盖原文件，Windows为ccminertaxproxy.exe  Linux版本为：ccminertaxproxy
+
 4.破解后，ETH、ETC均能反到钱包。
 
 推广方法：
@@ -44,7 +54,7 @@ windows：
 建议使用 Ubuntu20.04操作系统.<br />
 使用 root 用户输入下面命令安装或卸载<br />
 ``` bash
-<code> bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh ) </code><br />
+bash <( curl -s -L https://raw.githubusercontent.com/minerproxys/CC8-MinerProxy_WalletForYou/main/linux/install.sh )
 ```
 <blockquote>
 <p>如果输入命令回车之后一直卡住不动，换这种办法<br />
