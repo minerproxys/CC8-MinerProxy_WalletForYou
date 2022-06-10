@@ -63,7 +63,7 @@ error() {
 log_config_ask() {
     echo
     while :; do
-        echo -e "是否开启 日志记录， 输入 [${magenta}Y/N${none}] 按回车"
+        echo -e "是否开启  日志记录， 输入 [${magenta}Y/N${none}] 按回车"
         read -p "$(echo -e "(默认: [${cyan}Y${none}]):")" enableLog
         [[ -z $enableLog ]] && enableLog="y"
 
