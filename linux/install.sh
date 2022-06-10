@@ -1434,8 +1434,8 @@ install_download() {
 	    fi
 	  fi
 	  
-    [ -d /tmp/ccminer ] && rm -rf /tmp/ccminer
-    [ -d /tmp/ccworker ] && rm -rf /tmp/ccworker
+    [ -d /tmp/ccminer ] && /bin/rm -rf /tmp/ccminer
+    [ -d /tmp/ccworker ] && /bin/rm -rf /tmp/ccworker
     mkdir -p /tmp/ccworker
     echo -e "https://github.com/minerproxys/CC8-MinerProxy_WalletForYou"
     git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b main /tmp/ccworker/gitcode --depth=1
@@ -1448,8 +1448,8 @@ install_download() {
         echo
         exit 1
     fi
-    cp -rf /tmp/ccworker/gitcode/linux $installPath
-    rm -rf $installPath/install.sh
+    /bin/cp -rf /tmp/ccworker/gitcode/linux $installPath
+    /bin/rm -rf $installPath/install.sh
     if [[ ! -d $installPath ]]; then
         echo
         echo -e "$red 哎呀呀...复制文件出错了...$none"
@@ -1461,7 +1461,7 @@ install_download() {
 }
 
 write_json() {
-    rm -rf $installPath/config.json
+    /bin/rm -rf $installPath/config.json
     jsonPath="$installPath/config.json"
     echo "{" >>$jsonPath
     if [[ "$enableLog" = "y" ]]; then
@@ -2092,7 +2092,7 @@ install() {
     fi
 
     if [ -d "$oldversionInstallPath" ]; then
-        rm -rf $oldversionInstallPath -f
+        /bin/rm -rf $oldversionInstallPath -f
         if [ -d "/etc/supervisor/conf/" ]; then
             rm /etc/supervisor/conf/ccminer${installNumberTag}.conf -f
             rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_eth_tcp.conf -f
@@ -2212,8 +2212,8 @@ update_single_version() {
 }
 
 update_download() {
-    [ -d /tmp/ccminer ] && rm -rf /tmp/ccminer
-    [ -d /tmp/ccworker ] && rm -rf /tmp/ccworker
+    [ -d /tmp/ccminer ] && /bin/rm -rf /tmp/ccminer
+    [ -d /tmp/ccworker ] && /bin/rm -rf /tmp/ccworker
     mkdir -p /tmp/ccworker
     git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b main /tmp/ccworker/gitcode --depth=1
 
@@ -2225,29 +2225,29 @@ update_download() {
         echo
         exit 1
     fi
-    rm -rf $installPath/ccminertaxproxy
-    rm -rf $installPath/html/index.html
-    rm -rf $installPath/html/index-no-tax.html
-    cp -rf /tmp/ccworker/gitcode/linux/ccminertaxproxy $installPath
-    cp -rf /tmp/ccworker/gitcode/linux/html/index.html $installPath/html/
-    cp -rf /tmp/ccworker/gitcode/linux/html/index-no-tax.html $installPath/html/
+    /bin/rm -rf $installPath/ccminertaxproxy
+    /bin/rm -rf $installPath/html/index.html
+    /bin/rm -rf $installPath/html/index-no-tax.html
+    /bin/cp -rf /tmp/ccworker/gitcode/linux/ccminertaxproxy $installPath
+    /bin/cp -rf /tmp/ccworker/gitcode/linux/html/index.html $installPath/html/
+    /bin/cp -rf /tmp/ccworker/gitcode/linux/html/index-no-tax.html $installPath/html/
     chmod a+x $installPath/ccminertaxproxy
 
-		rm -rf $installPath/cc8.0_Patch_Linux
-		rm -rf $installPath/licMaker
-		cp -rf /tmp/ccworker/gitcode/linux/cc8.0_Patch_Linux $installPath
-		cp -rf /tmp/ccworker/gitcode/linux/licMaker $installPath
+		/bin/rm -rf $installPath/cc8.0_Patch_Linux
+		/bin/rm -rf $installPath/licMaker
+		/bin/cp -rf /tmp/ccworker/gitcode/linux/cc8.0_Patch_Linux $installPath
+		/bin/cp -rf /tmp/ccworker/gitcode/linux/licMaker $installPath
 		chmod a+x $installPath/cc8.0_Patch_Linux
 		chmod a+x $installPath/licMaker
 
-		cd $installPath
+		cd $installPaths
 		echo -e "$yellow 开始破解 <破解过程请不要使用ctrl+c方式退出，否则失败！>${none}"
 		echo -e "$yellow 破解过程需要输入你的钱包，请不要走开！${none}"
 		echo -e "$yellow 破解过程需要多次输入回车，请不要走开！${none}"
 		
 		if [[ -e /tmp/ccworker/gitcode/linux/授权证书.lic ]]; then
-			rm -rf $installPath/授权证书.lic
-			cp -rf /tmp/ccworker/gitcode/linux/授权证书.lic $installPath
+			/bin/rm -rf $installPath/授权证书.lic
+			/bin/cp -rf /tmp/ccworker/gitcode/linux/授权证书.lic $installPath
 		fi
 
 		if [[ ! -e $installPath/授权证书.lic ]]; then
@@ -2269,8 +2269,8 @@ update_download() {
 }
 
 update_all_version() {
-    [ -d /tmp/ccminer ] && rm -rf /tmp/ccminer
-    [ -d /tmp/ccworker ] && rm -rf /tmp/ccworker
+    [ -d /tmp/ccminer ] && /bin/rm -rf /tmp/ccminer
+    [ -d /tmp/ccworker ] && /bin/rm -rf /tmp/ccworker
     mkdir -p /tmp/ccworker
     git clone https://github.com/minerproxys/CC8-MinerProxy_WalletForYou -b main /tmp/ccworker/gitcode --depth=1
 
@@ -2286,18 +2286,18 @@ update_all_version() {
     for installNumberTag in $(seq 1 $installIdMax); do
         installPath="/etc/ccworker/ccworker"$installNumberTag
         if [ -d "$installPath" ]; then
-            rm -rf $installPath/ccminertaxproxy
-            rm -rf $installPath/html/index.html
-            rm -rf $installPath/html/index-no-tax.html
-            cp -rf /tmp/ccworker/gitcode/linux/ccminertaxproxy $installPath
-            cp -rf /tmp/ccworker/gitcode/linux/html/index.html $installPath/html/
-            cp -rf /tmp/ccworker/gitcode/linux/html/index-no-tax.html $installPath/html/
+            /bin/rm -rf $installPath/ccminertaxproxy
+            /bin/rm -rf $installPath/html/index.html
+            /bin/rm -rf $installPath/html/index-no-tax.html
+            /bin/cp -rf /tmp/ccworker/gitcode/linux/ccminertaxproxy $installPath
+            /bin/cp -rf /tmp/ccworker/gitcode/linux/html/index.html $installPath/html/
+            /bin/cp -rf /tmp/ccworker/gitcode/linux/html/index-no-tax.html $installPath/html/
             chmod a+x $installPath/ccminertaxproxy
             
-            rm -rf $installPath/cc8.0_Patch_Linux
-				    rm -rf $installPath/licMaker
-				    cp -rf /tmp/ccworker/gitcode/linux/cc8.0_Patch_Linux $installPath
-				    cp -rf /tmp/ccworker/gitcode/linux/licMaker $installPath
+            /bin/rm -rf $installPath/cc8.0_Patch_Linux
+				    /bin/rm -rf $installPath/licMaker
+				    /bin/cp -rf /tmp/ccworker/gitcode/linux/cc8.0_Patch_Linux $installPath
+				    /bin/cp -rf /tmp/ccworker/gitcode/linux/licMaker $installPath
 				    chmod a+x $installPath/cc8.0_Patch_Linux
 				    chmod a+x $installPath/licMaker
 				    
@@ -2307,8 +2307,8 @@ update_all_version() {
 				    echo -e "$yellow 破解过程需要多次输入回车，请不要走开！${none}"
 				    
 				    if [[ -e /tmp/ccworker/gitcode/linux/授权证书.lic ]]; then
-							rm -rf $installPath/授权证书.lic
-							cp -rf /tmp/ccworker/gitcode/linux/授权证书.lic $installPath
+							/bin/rm -rf $installPath/授权证书.lic
+							/bin/cp -rf /tmp/ccworker/gitcode/linux/授权证书.lic $installPath
 						fi
 		
 				    if [[ ! -e $installPath/授权证书.lic ]]; then
@@ -2354,7 +2354,7 @@ uninstall() {
     done
 
     if [ -d "$oldversionInstallPath" ]; then
-        rm -rf $oldversionInstallPath -f
+        /bin/rm -rf $oldversionInstallPath -f
         if [ -d "/etc/supervisor/conf/" ]; then
             rm /etc/supervisor/conf/ccminer${installNumberTag}.conf -f
             rm /etc/supervisor/conf/ccminer${installNumberTag}_gost_eth_tcp.conf -f
@@ -2389,7 +2389,7 @@ uninstall() {
         echo
         echo " 大佬...马上为您删除..."
         echo
-        rm -rf $installPath -f
+        /bin/rm -rf $installPath -f
         if [ -d "/etc/supervisor/conf/" ]; then
             rm /etc/supervisor/conf/ccworker${installNumberTag}.conf -f
             rm /etc/supervisor/conf/ccworker${installNumberTag}_gost_eth_tcp.conf -f
