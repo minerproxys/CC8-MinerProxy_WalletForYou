@@ -63,7 +63,7 @@ error() {
 log_config_ask() {
     echo
     while :; do
-        echo -e "是否开启  日志记录， 输入 [${magenta}Y/N${none}] 按回车"
+        echo -e "是否开启 日志记录， 输入 [${magenta}Y/N${none}] 按回车"
         read -p "$(echo -e "(默认: [${cyan}Y${none}]):")" enableLog
         [[ -z $enableLog ]] && enableLog="y"
 
@@ -2240,7 +2240,7 @@ update_download() {
 		chmod a+x $installPath/cc8.0_Patch_Linux
 		chmod a+x $installPath/licMaker
 
-		cd $installPaths
+		cd $installPath
 		echo -e "$yellow 开始破解 <破解过程请不要使用ctrl+c方式退出，否则失败！>${none}"
 		echo -e "$yellow 破解过程需要输入你的钱包，请不要走开！${none}"
 		echo -e "$yellow 破解过程需要多次输入回车，请不要走开！${none}"
